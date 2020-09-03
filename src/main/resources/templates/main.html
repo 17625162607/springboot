@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>主页面</title>
+	<link rel="stylesheet" th:href="@{/js/easyUI/themes/gray/easyui.css}"></link>
+    <link rel="stylesheet" href="../js/easyUI/themes/icon.css"></link>
+    <link rel="stylesheet" href="../js/easyUI/themes/color.css"></link>
+    <link rel="stylesheet" href="../js/easyUI/themes/sidemenu_style.css"></link>
+    <link rel="stylesheet" href="../js/highchart/css/themes/dark-unica.css"></link>
+    <script type="text/javascript" src="../js/easyUI/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/easyUI/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../js/highchart/highcharts.js"></script>
+    <script type="text/javascript" src="../js/highchart/exporting.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		  $.ajax({
+	   		   type:"post",
+	   		   url:"../menu/getTreeAuthMenu",
+	   		   data:{},
+	   		   dataType:"json",
+	   		   success:function(res){
+	   			   //动态加载tree菜单
+	   		   	   $("#tt").tree({
+	   			   	    lines:true,
+	   			   	    data:res,
+	   				   	onClick: function(node){
+	   				   		//调用 
+	   				 		open(node.attributes,node.text,node.iconCls);
+	   				 	}
+	   		   	   });
+	   		   }
+	   	   })
+	  })
+	  //菜单点击方法 
+      function open(url,text,icons){
+    	   if($('#tabs').tabs('exists',text)){
+    		   $('#tabs').tabs('select',text);
+    	   }else{
+    		   if(url!=null && url!=''){
+    			   $('#tabs').tabs('add',{
+	   	       		    title:text,
+	   	       		    content:'<iframe name="content" src='+url+' frameBorder="0" border="0" marginheight=0 marginwidth=0 scrolling= "no" style="width: 100%; height: 99%;" noResize/>',
+	   	       		    closable:true,
+	   	       		    iconCls:icons
+	   	       	   });
+    		   }
+    	   }
+    	   
+       }
+	</script>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north'" style="height:50px"></div>
+	<div data-options="region:'west',split:true" title=" " style="width:150px;">
+	    <ul id="tt" class="easyui-tree" >
+		</ul>
+	</div>
+	<div data-options="region:'center'">
+		<div id="tabs" class="easyui-tabs" data-options="fit:true">
+		    <div title="首页" data-options="iconCls:'icon-home',closable:true" style="padding:10px;position:relative;overflow:auto;">
+	        </div>
+	   </div>
+	</div>
+ 
+</body>
+</html>

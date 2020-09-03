@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.dao.IUserMapper">
+
+   <select id="findAllUser" resultType="springboot.bean.User" >
+       SELECT id,name,sex,age,addr from user
+   </select>
+   <select id="selectUser" resultType="springboot.bean.User" parameterType="int">
+       SELECT id,name,sex,age,addr from user where id=#{id}
+   </select>
+   <insert id="insertUser" parameterType="springboot.bean.User">
+       insert into user(name,sex,age,addr) values(#{name},#{sex},#{age},#{addr})
+   </insert>
+   <update id="updateUser" parameterType="springboot.bean.User">
+       update user
+       <set>
+          <if test="name !=null and name!=''">
+              name=#{name},
+          </if>
+          <if test="sex !=null and sex!=''">
+              sex=#{sex},
+          </if>
+          <if test="age !=null and age!=''">
+              age=#{age},
+          </if>
+          <if test="addr !=null and addr!=''">
+              addr=#{addr}
+          </if>
+          <where>
+              id=#{id}
+          </where>
+       </set>
+   </update>
+   <delete id="deleteUser" parameterType="int">
+       delete from user where id=#{id}
+   </delete>
+</mapper>

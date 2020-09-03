@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.dao.IUsersMapper">
+    <!-- <select id="selectUsers" parameterType="map" resultType="Users" >
+         select u.id,u.username name,u.email,u.sex,u.qq,u.weixin,date_format(u.regtime, '%Y-%m-%d') regtime,u.enable,u.filepath from users u
+         <where>
+             <if test="name!=null and name!='' " >
+                 u.username like '%${name}%'
+             </if>
+         </where>
+          order by u.username
+    </select> -->
+    
+    <!-- <insert id="insertUsers" parameterType="Users">
+        insert into users (id,username,password,email,sex,qq,weixin,regtime,enable,filepath) 
+        values(#{name},#{password},#{email,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{qq,jdbcType=VARCHAR},#{weixin,jdbcType=VARCHAR},str_to_date(#{regtime},'%Y-%m-%d'),#{enable,jdbcType=VARCHAR},#{filepath,jdbcType=VARCHAR})
+    </insert> -->
+    
+    <select id="selectUsers" parameterType="map" resultType="Users" >
+         select u.id,u.username name,u.email,u.sex,u.qq,u.weixin,to_char(u.regtime,'yyyy-MM-dd') regtime,u.enable,u.filepath from t_sys_user u
+         <where>
+             <if test="name!=null and name!='' " > 
+                 u.username like '%${name}%'
+             </if>
+         </where>
+          order by u.username
+    </select>
+   
+   <insert id="insertUsers" parameterType="Users">
+      insert into t_sys_user (id,username,password,email,sex,qq,weixin,regtime,enable,filepath) 
+      values(#{id},#{name},#{password},#{email,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{qq,jdbcType=VARCHAR},
+            #{weixin,jdbcType=VARCHAR},to_date(#{regtime}, 'yyyy-mm-dd'),#{enable,jdbcType=VARCHAR},#{filepath,jdbcType=VARCHAR})
+   </insert>
+    
+    
+    <update id="update" parameterType="Users">
+      update t_sys_user t 
+      <set>
+         <if test="name!=null and name!='' "> t.username=#{name},</if>
+         <if test="password!=null and password!='' "> t.password=#{password},</if>
+         <if test="email!=null and email!='' "> t.email=#{email},</if>
+         <if test="sex!=null and sex!='' "> t.sex=#{sex},</if>
+         <if test="qq!=null and qq!='' "> t.qq=#{qq},</if>
+         <if test="weixin!=null and weixin!='' "> t.weixin=#{weixin},</if>
+         <if test="regtime!=null and regtime!='' "> t.regtime=to_date(#{regtime},'yyyy-mm-dd'),</if>
+         <if test="filepath!=null and filepath!='' "> t.filepath=#{filepath},</if>
+         <if test="enable!=null and enable!='' "> t.enable=#{enable}</if>
+      </set>
+      <where> 
+         t.id=#{id}
+      </where>
+   </update>
+   
+   <delete id="del" parameterType="map">
+        delete from t_sys_user where id in (${id})
+   </delete>
+   
+   <delete id="delUserRoleRel" parameterType="map">
+      delete from t_sys_user_role t where t.userid in (${id})
+   </delete>
+   
+   <select id="getObjById" parameterType="String" resultType="Users">
+       select t.id,t.username name,t.password,t.email,t.sex,t.qq,t.weixin,t.regtime,t.enable,t.filepath from t_sys_user t where t.id=#{id}
+   </select>
+   
+   <delete id="delUserRole" parameterType="String">
+       delete from t_sys_user_role t where t.userid=#{userid}
+   </delete>
+   
+    <insert id="saveUserRole" parameterType="String">
+       insert into t_sys_user_role values (p2p_seq.nextval,#{0},#{1})
+   </insert>
+   
+   
+   
+</mapper>

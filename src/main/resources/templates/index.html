@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>userList</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.css}"></link>
+    
+</head>
+<body class="container">
+<br/>
+<h1>用户列表</h1>
+<br/><br/>
+<div class="with:80%">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>id</th>
+            <th>姓名</th>
+            <th>性别</th>    
+            <th>年龄</th>
+            <th>地址</th>
+            <th>功能&nbsp;/&nbsp;<a href="http://www.baidu.com" th:href="@{/user/toAdd}" >增加</a> </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr  th:each="user,s: ${list}">
+            <td th:text="${s.count}">1</td>
+            <th scope="row" th:text="${user.id}">100</th>
+            <td th:if="${user.name!=null}" th:text="${user.name}">张三</td>
+            <td th:text="${user.sex}">男</td>
+            <td th:text="${user.age}">20</td>
+            <td th:text="${user.addr}">北京</td>
+            <td><a th:href="@{/user/userinfo(id=${user.id})}">修改</a>&nbsp;|&nbsp;<a th:href="@{/user/deleteUser(id=${user.id})}">删除</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+       <a th:href="@{/user/index(currentPage=${pageNum}-1)}">上页</a> <a th:href="@{/user/index(currentPage=${pageNum}+1)}">下页</a>
+    </div>
+</div>
+
+</body>
+</html>
